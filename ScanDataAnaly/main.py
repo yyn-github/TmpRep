@@ -55,8 +55,9 @@ class Config:
 		self.config.read('flash.ini', encoding='utf-16')
 		index:int = 0
 		for section in self.config.sections():
-			item = SectionItem(section, self.config[section]['Name'], index++)
+			item = SectionItem(section, self.config[section]['Name'], index)
 			self.section_list.append(item)
+			index += 1
 
 	def get_flash_id(self):
 		return self.config.sections() 
@@ -136,9 +137,10 @@ class CoreWnd(QDialog):
 		self.id_search_edt = QLineEdit(self)
 		self.layout.addWidget(self.id_search_edt)
 		self.id_search_cmbox = QComboBox(self)
-		self.id_search_cmbox.currentIndex.connect(self.search_id_clicked)
+		self.id_search_cmbox.currentIndexChanged.connect(self.search_id_clicked)
 		self.layout.addWidget(self.id_search_cmbox)
 		self.id_search_but = QPushButton('search',self)
+		self.id_search_but.clicked.connect(self.search_flash_id)
 		self.layout.addWidget(self.id_search_but)
 
 		#set ce number comboBox
@@ -189,8 +191,8 @@ class CoreWnd(QDialog):
 			for id in result:
 				self.id_search_cmbox.addItem(id)
 
-	def search_id_clicked(self):
-		self.id_cmbox
+	def search_id_clicked(self, index):
+		self.id_cmbox.setCurrentText( self.id_search_cmbox.currentText())
 
 	def set_ce_number(self, num):
 		self.ce_number = num
